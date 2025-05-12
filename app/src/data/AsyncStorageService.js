@@ -1,7 +1,7 @@
 const { default: AsyncStorage } = require("@react-native-async-storage/async-storage");
 
 class AsyncStorageService {
-   async saveDate(key, value) {
+   async saveData(key, value) {
    try {
     await AsyncStorage.setItem(key, JSON.stringify(value));
    } catch (err) {
@@ -16,8 +16,22 @@ class AsyncStorageService {
             console.error("Error getting data", err);
         }
     }
+
+    async updateData(key, value) {
+        try {
+            const existingData = await this.getData(key);
+            if (existingData) {
+                const updatedData = { ...existingData, ...value };
+                await this.saveData(key, updatedData);
+            } else {
+                console.error("No existing data found for the key");
+            }
+        } catch (err) {
+            console.error("Error updating data", err);
+        }
+    }
     
-    async removeDate(key) {
+    async removeData(key) {
         try {
             await AsyncStorage.removeItem(key);
         } catch (err) {

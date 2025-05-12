@@ -1,57 +1,77 @@
-import axios from "axios";
-import apiRoutes from "../config/apiRoutes";
-
+import axios from 'axios';
+import apiConfig from '../config/apiConfig';
 
 class ApiService {
+  constructor(token = '') {
+    this.api = axios.create({
+      baseURL:  apiConfig.baseURL,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : '', 
+      },
+    });
+  }
 
-    constructor(){
-        this.api = axios.create({ 
-            baseURL: "https://api.example.com", 
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-    }
 
-    async fetchJournalEntries(){
-        try {
-            const response = await this.api.get(apiRoutes.journalEntries);
-        } catch (error) {
-            console.error("Error fetching journal entries", error);
-        }
-    }
+  setAuthToken(token) {
+    this.api.defaults.headers['Authorization'] = token ? `Bearer ${token}` : '';
+  }
 
-    async createJournalEntry(entry){
-        try {
-            const response = await this.api.post(apiRoutes.journalEntries, entry);
-            return response.data;
-        } catch (error) {
-            console.error("Error creating journal entry", error);
-        }
+  // GET Request
+  async get(url, config = {}) {
+    try {
+      const response = await this.api.get(url, config);
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
     }
+  }
 
-    async updateJournalEntry(id, entry){
-        try {
-            const response = await this.api.put(apiRoutes.journalEntry(id), entry);
-            return response.data;
-        } catch (error) {
-            console.error("Error updating journal entry", error);
-        }
+  // POST Request
+  async post(url, data, config = {}) {
+    try {
+      const response = await this.api.post(url, data, config);
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
     }
-    async deleteJournalEntry(id){
-        try {
-            await this.api.delete(apiRoutes.journalEntry(id));
-        } catch (error) {
-            console.error("Error deleting journal entry", error);
-        }
-    }
+  }
 
-    async fetchJournalEntry(id){
-        try {
-            const response = await this.api.get(apiRoutes.journalEntry(id));
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching journal entry", error);
-        }
+  // PUT Request
+  async put(url, data, config = {}) {
+    try {
+      const response = await this.api.put(url, data, config);
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
     }
+  }
+
+  // DELETE Request
+  async delete(url, config = {}) {
+    try {
+      const response = await this.api.delete(url, config);
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  // Error Handling Method
+  handleError(error) {
+    if (error.response) {
+      // The server responded with a status other than 2xx
+      console.error('Error Response:', error.response.data);
+      console.error('Status Code:', error.response.status);
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.error('Error Request:', error.request);
+    } else {
+      // Something happened in setting up the request
+      console.error('Error Message:', error.message);
+    }
+    throw error; // You can also throw the error or handle it further
+  }
 }
+
+export default ApiService;
