@@ -1,28 +1,30 @@
-import { StyleSheet } from 'react-native';
-
+import { StyleSheet } from "react-native";
 
 // Styles file that accepts dynamic theme colors
 const journalEntrystyles = {
-    container: (backgroundColor: string) =>
-      StyleSheet.create({
-        container: {
-          padding: 16,
-          backgroundColor, 
-        },
-      }).container,
-  
-      input: {
-        borderWidth: 1,
-        padding: 8,
-        marginBottom: 8,
-        borderRadius: 6,
+  container: (backgroundColor: string) =>
+    StyleSheet.create({
+      container: {
+        padding: 16,
+        backgroundColor,
       },
-  
-      entry: {
-        paddingVertical: 4,
-        fontSize: 16,
-    
-      },
-  };
+    }).container,
+
+  input: {
+    borderWidth: 1,
+    padding: 8,
+    marginBottom: 8,
+    borderRadius: 6,
+  },
+
+  entry: {
+    paddingVertical: 4,
+    fontSize: 16,
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 12,
+  },
+};
 
 export default journalEntrystyles;
